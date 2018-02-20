@@ -1,24 +1,22 @@
-/*
- * spi.h
- *
- * Created: 10/11/2016 9:18:47 PM
- *  Author: m.mamdooh
- */ 
-
 
 #ifndef SPI_H_
 #define SPI_H_
-#include "Types.h"
+
 #include "SPI_Cfg.h"
+////////////////////////////////////////////////////////
+////////// addresses /////////////////////////////////
+//////////////////////////////////////////////////////
+#define  SPDR *((volatile char*) 0x2f)
+#define  SPSR *((volatile char*) 0x2e)
+#define	 SPCR *((volatile char*) 0x2d)
 
-#define  SPDR *((u8*) 0x2f)
-#define  SPSR *((u8*) 0x2e)
-#define	 SPCR *((u8*) 0x2d)
-
-#define MOSI DIO_u8PinB5
-#define MISO DIO_u8PinB6
-#define SS_Low DIO_u8PinB4
-#define SCK DIO_u8PinB7
+////////////////////////////////////////////////////////
+////////// pins /////////////////////////////////
+//////////////////////////////////////////////////////
+#define SS_SPI 12
+#define MOSI 13
+#define MISO 14
+#define SCK 15
 
 typedef struct
 {
@@ -26,13 +24,13 @@ typedef struct
 		/* Master --> 1
 		 * Slave  --> 0
 		 */
-	u8 SPI_Type;
+	char SPI_Type;
 	/*Data Order*/
 		/*
 		 *LSB of data transmitted first --> 1
 		 *MSB of data transmitted first --> 0
 		  */
-	u8 Data_Order;
+	char Data_Order;
 	/*Clock Select */
 		/*
 		 * sel2 Sel1 Sel0     SCK Frequency
@@ -45,30 +43,32 @@ typedef struct
 			1 	1 	 0 			fosc/32
 			1 	1 	 1 			fosc/64
 		 */
-	u8 Clock_Sel0;
-	u8 Clock_Sel1;
-	u8 Clock_Sel2;
+	char Clock_Sel0;
+	char Clock_Sel1;
+	char Clock_Sel2;
 	/*Clock Polarity*/
 		/*
 		  	  Leading Edge 		Trailing Edge
 		  0     Rising 	     		Falling
 		  1     Falling 	 		Rising
 		 */
-	u8 Clock_Polarity;
+	char Clock_Polarity;
 	/*Clock Phase*/
 		/*
 		  	  Leading Edge 		Trailing Edge
 		  0 	Sample 		  		Setup
 		  1 	Setup 		  		Sample
 		 */
-	u8 Clock_Phase;
+	char Clock_Phase;
 
 }SPI_CfgType;
 
 extern const SPI_CfgType SPI_ConfigParam [SPI_GROUPS_NUMBER];
 
-extern void SPI_Transmit (u8 data);
-extern void SPI_Recieve (u8 *data);
-extern void SPI_Init(void);
-
-#endif /* SPI_H_ */
+////////////////////////////////////////////////////////
+////////// prototypes /////////////////////////////////
+//////////////////////////////////////////////////////
+void SPI_masterInit(void);
+void SPI_Transmit(char cData);
+void SPI_Recieve(char *data);
+#endif /* SPI_H_ */	
