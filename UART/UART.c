@@ -17,7 +17,7 @@
 #define UCSRC *((u8*) 0x40) //UBRRH
 #define SREG *((u8*)0x5f)
 
-#define OverRun_DelayTime 85
+#define OverRun_DelayTime 100
 const UART_ConfigType* CfgPtr;
 UART_State UART_CurrentState =UART_STATE_UNINIT;
 u8 UART_NewValue=0;
@@ -25,18 +25,19 @@ u8 counter=0;
 
 extern void  UART_voidInit (void)
 {
+	CfgPtr = &UART_ConfigParam [0];
 	// Enable Global Interrupt
 	set_bit(SREG,7);
-	// UCSRB Bit 7 – RXCIE: RX Complete Interrupt Enable
+	// UCSRB Bit 7 â€“ RXCIE: RX Complete Interrupt Enable
 	set_bit(UCSRB,7);
-	// UCSRB Bit 6 – TXCIE: TX Complete Interrupt Enable
+	// UCSRB Bit 6 â€“ TXCIE: TX Complete Interrupt Enable
 	set_bit(UCSRB,6);
-	// UCSRB Bit 5 – UDRIE: USART Data Register Empty Interrupt Enable
+	// UCSRB Bit 5 â€“ UDRIE: USART Data Register Empty Interrupt Enable
 	clr_bit(UCSRB,5);
-	//UCSRB Bit 4 – RXEN: Receiver Enable
+	//UCSRB Bit 4 â€“ RXEN: Receiver Enable
 	set_bit(UCSRB,4);
 
-	// UCSRA Bit 1 – U2X: Double the USART Transmission Speed
+	// UCSRA Bit 1 â€“ U2X: Double the USART Transmission Speed
 		/*
 		 	  U2X			 Mode
 				1 		Asynchronous Operation
@@ -44,14 +45,14 @@ extern void  UART_voidInit (void)
 		 */
 	UCSRA |= CfgPtr->Double_Asynch_Clock << 1;//set_bit(UCSRA,1);
 
-	// UCSRC Bit 7 – URSEL: Register Select
+	// UCSRC Bit 7 â€“ URSEL: Register Select
 		/*
 			 This bit selects between accessing the UCSRC or the UBRRH Register
 			 It is read as one when reading UCSRC.
 			 It is read as zero when reading UBRRH
 		 */
 	set_bit(UCSRC,7);
-	// UCSRC Bit 6 – UMSEL: USART Mode Select
+	// UCSRC Bit 6 â€“ UMSEL: USART Mode Select
 		/*
 		 UMSEL			 Mode
 			0 		Asynchronous Operation
@@ -59,25 +60,25 @@ extern void  UART_voidInit (void)
 		 */
 	UCSRC |= CfgPtr->UART_Mode << 6;// clr_bit(UCSRC,6);
 
-	//Bit 0 – UCPOL: Clock Polarity
+	//Bit 0 â€“ UCPOL: Clock Polarity
 	UCSRC |= CfgPtr->Clock_Polarity << 0;
 
-	// UCSRC Bit 5:4 – UPM1:0: Parity Mode
+	// UCSRC Bit 5:4 â€“ UPM1:0: Parity Mode
 		/*UPM1 UPM0 Parity Mode
 		0 0 Disabled
 		0 1 Reserved
 		1 0 Enabled, Even Parity
 		1 1 Enabled, Odd Parity*/
 	UCSRC |= CfgPtr->Parity << 4; //clr_bit(UCSRC,5); clr_bit(UCSRC,4);
-	// UCSRC Bit 3 – USBS: Stop Bit Select
+	// UCSRC Bit 3 â€“ USBS: Stop Bit Select
 		/*
 		 USBS Stop Bit(s)
 			0 1-bit
 			1 2-bit
 		 */
 	UCSRC |= CfgPtr->Stop_Bits << 3;//clr_bit(UCSRC,3);
-	// UCSRB Bit 2 – UCSZ2: Character Size
-	// UCSRC Bit 2:1 – UCSZ1:0: Character Size    0 1 1 --> 8-bit
+	// UCSRB Bit 2 â€“ UCSZ2: Character Size
+	// UCSRC Bit 2:1 â€“ UCSZ1:0: Character Size    0 1 1 --> 8-bit
 		 /*
 		  UCSZ2 UCSZ1 UCSZ0 Character Size
 			0 	 0 		0	 	5-bit
@@ -98,14 +99,14 @@ extern void  UART_voidInit (void)
 		set_bit(UCSRB,2);
 
 	}
-	// UCSRC Bit 7 – URSEL: Register Select
+	// UCSRC Bit 7 â€“ URSEL: Register Select
 		/*
 			 This bit selects between accessing the UCSRC or the UBRRH Register
 			 It is read as one when reading UCSRC.
 			 It is read as zero when reading UBRRH
 		*/
 	clr_bit(UCSRC,7);
-	// Bit 14:12 – Reserved Bits
+	// Bit 14:12 â€“ Reserved Bits
 	/*
 	 	 These bits are reserved for future use. For compatibility with future devices, these bit
 		must be written to zero when UBRRH is written.
@@ -113,7 +114,7 @@ extern void  UART_voidInit (void)
 	clr_bit(UCSRC,6);
 	clr_bit(UCSRC,5);
 	clr_bit(UCSRC,4);
-	//UBRRL and UBRRH Bit 11:0 – UBRR11:0: USART Baud Rate Register
+	//UBRRL and UBRRH Bit 11:0 â€“ UBRR11:0: USART Baud Rate Register
 			/*
 			 BaudRate(bps) fosc = 8.0000 MHz
 						U2X = 0 			U2X = 1
@@ -272,7 +273,7 @@ extern u8  UART_u8Transmit (u8 data)
 	if ((UART_CurrentState == UART_STATE_INIT) && (counter > OverRun_DelayTime))
 		{
 			UART_CurrentState =UART_STATE_TX_ONGOING;
-			//UCSRB Bit 3 – TXEN: Transmitter Enable
+			//UCSRB Bit 3 â€“ TXEN: Transmitter Enable
 			set_bit(UCSRB,3);
 			UDR=data;
 			counter=0;
@@ -292,7 +293,7 @@ void __vector_13 (void)
 {
 	UART_CurrentState =UART_STATE_RX_DONE;
 	UART_NewValue=UDR;
-	//UCSRA Bit 7 – RXC: USART Receive Complete
+	//UCSRA Bit 7 â€“ RXC: USART Receive Complete
 	//set_bit(UCSRA,7);
 }
 
@@ -300,9 +301,9 @@ void __vector_15 (void)  __attribute__((signal,__INTR_ATTRS));
 void __vector_15 (void)
 {
 	UART_CurrentState =UART_STATE_INIT;
-	//UCSRA Bit 6 – TXC: USART Transmit Complete
+	//UCSRA Bit 6 â€“ TXC: USART Transmit Complete
 	set_bit(UCSRA,6);
 		//flag_transmit=1;
-	//UCSRB Bit 3 – TXEN: Transmitter Enable
+	//UCSRB Bit 3 â€“ TXEN: Transmitter Enable
 	clr_bit(UCSRB,3);
 }
