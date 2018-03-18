@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:layout_height="match_parent"
+        tools:context="com.example.android.application.MainActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registeration"
+            android:layout_marginLeft="100dp"
+            android:textSize="20dp"
+            android:textColor="#9C27B0"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Name:"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Name"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password:"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="password"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Age:"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Age"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gender:"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:layout_width="214dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <RadioButton
+                android:id="@+id/yes_radio_button"
+                android:layout_width="112dp"
+                android:layout_height="wrap_content"
+                android:text="Female"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <RadioButton
+                android:id="@+id/no_radio_button"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:text="male"
+                android:textAppearance="?android:textAppearanceMedium" />
+        </RadioGroup>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="E_mail"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="E_mail"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth:"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="year"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/name_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Year"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Month"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/name_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Month"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/name_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Day"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency case:"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#D50000"
+            android:textStyle="bold"
+            android:padding="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold"
+            android:paddingLeft="16dp"/>
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Emergency Name"
+            android:paddingLeft="16dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="#1A237E"
+            android:textStyle="bold"
+            android:paddingLeft="16dp"/>
+        <EditText
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Emergency Number"
+            android:paddingLeft="16dp"
+            />
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_color"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:text="Sumbit"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="220dp"
+            android:textAppearance="?android:textAppearanceLarge" />
+
+    </LinearLayout>
+</ScrollView>
