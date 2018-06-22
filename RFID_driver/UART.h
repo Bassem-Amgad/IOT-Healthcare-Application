@@ -7,7 +7,9 @@
 void UART_Init(void );
 void UART_Transmit( int Data ) ;
 void UART_Receive( char *PtrToData );
-
+void UART_Transmit_String(unsigned char *str);
+unsigned char Hexa_return(unsigned char decimal);
+void Hexa_UART(unsigned char data);
 
 //////////////////////////////////////////////////////
 //////////////// Configuration //////////////////////
