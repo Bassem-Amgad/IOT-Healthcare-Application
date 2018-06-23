@@ -8,30 +8,45 @@ public class User {
 
 
 
-    private String RFID;
-
+    private String age;
+    private String name;
+private String uid;
 
 
     public User() {
     }
 
-    public User(String RFID) {
+    public User(String name,String age,String uid) {
 
 
-        this.RFID=RFID;
+        this.name=name;
+        this.age=age;
+        this.uid=uid;
 
 
     }
 
-
-
-
-
-    public String getRFID() {
-        return RFID;
+    public String getAge() {
+        return age;
     }
 
-    public void setRFID(String RFID) {
-        this.RFID = RFID;
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
