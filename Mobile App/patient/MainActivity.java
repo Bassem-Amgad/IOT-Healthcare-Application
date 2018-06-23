@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +29,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,18 +43,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     private TextView mUsername;
+    private TextView mRFID;
+    private TextView mAge;
     private TextView tempText;
     private TextView pulseText;
     private TextView oxygenText;
     private Button editProfile;
 
-    private EditText RFIDEditText;
+    private EditText AgeEditText;
+    private EditText nameEditText;
     private Button submitButton;
+    private TextView hideText;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-
-    public String Naming;
 
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
@@ -69,25 +74,43 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         mMessagesDatabaseReference = mFirebaseDatabase.getReference();
-
+        mDatabaseReference=FirebaseDatabase.getInstance().getReference();
         mUsername=(TextView) findViewById(R.id.username_textView);
+        mRFID=(TextView) findViewById(R.id.rfid_textView);
+        mAge=(TextView) findViewById(R.id.age_textView);
         tempText =(TextView) findViewById(R.id.temp_textView);
         pulseText =(TextView) findViewById(R.id.pulse_textView);
         oxygenText =(TextView) findViewById(R.id.oxygen_textView);
         editProfile=(Button) findViewById(R.id.edit_profile_button);
 
-        RFIDEditText =(EditText) findViewById(R.id.rfid_editText);
+        AgeEditText =(EditText) findViewById(R.id.age_editText);
+        nameEditText=(EditText) findViewById(R.id.name_editText);
         submitButton=(Button) findViewById(R.id.submit_button);
+        hideText= (TextView) findViewById(R.id.hide_textView);
 
        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                User user = new User( RFIDEditText.getText().toString()  );
+                if(TextUtils.isEmpty(nameEditText.getText().toString())|TextUtils.isEmpty(AgeEditText.getText().toString())){
+                    Toast.makeText(getApplicationContext(), "There is blank spaces", Toast.LENGTH_SHORT).show();
+                }
+                else{String S=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                User user = new User( nameEditText.getText().toString() ,AgeEditText.getText().toString() ,S);
+                Reading readingg=new Reading("","","");
                 mMessagesDatabaseReference.child(mFirebaseAuth.getCurrentUser().getUid()).push().setValue(user);
+                mDatabaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()).push().setValue(readingg);
+                mDatabaseReference.child("userData").child(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()).push().setValue(user);
 
 
-                RFIDEditText.setVisibility(View.GONE);
+
+                AgeEditText.setVisibility(View.GONE);
                 submitButton.setVisibility(View.GONE);
+                nameEditText.setVisibility(View.GONE);
+                hideText.setVisibility(View.GONE);
+                AgeEditText.setText("");
+                nameEditText.setText("");
+                AgeEditText.setHint("Age");
+                nameEditText.setHint("Name");}
                 //mUsername.setText(uid);
 
 
@@ -98,13 +121,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                RFIDEditText.setVisibility(View.VISIBLE);
+                nameEditText.setVisibility(View.VISIBLE);
+                AgeEditText.setVisibility(View.VISIBLE);
                 submitButton.setVisibility(View.VISIBLE);
+                hideText.setVisibility(View.VISIBLE);
 
 
             }
         });
+        hideText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AgeEditText.setVisibility(View.GONE);
+                submitButton.setVisibility(View.GONE);
+                nameEditText.setVisibility(View.GONE);
+                hideText.setVisibility(View.GONE);
+                AgeEditText.setText("");
+                nameEditText.setText("");
+                AgeEditText.setHint("Age");
+                nameEditText.setHint("Name");
 
+            }
+        });
+
+
+
+        querygetRFID();
+
+      //  attachDatabaseReadListener();
 
 
 
@@ -118,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     onSignedInInitialize(user.getDisplayName());
-                    mUsername.setText(user.getDisplayName());
+                   mRFID.setText(user.getDisplayName());
                 } else {
                     // User is signed out
                     onSignedOutCleanup();
@@ -127,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
                                     .setProviders(
-                                            AuthUI.EMAIL_PROVIDER,
-                                            AuthUI.GOOGLE_PROVIDER)
+                                            AuthUI.EMAIL_PROVIDER)
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -137,6 +180,48 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    private void querygetRFID(){
+       DatabaseReference reference= FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        final Query query =reference.orderByChild("uid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        final String St;
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for (DataSnapshot snapshot :dataSnapshot.getChildren()){
+                        User use =snapshot.getValue(User.class);
+
+                        mUsername.setText(use.getName());
+                        mAge.setText(use.getAge());
+
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                // Sign-in succeeded, set up the UI
+                Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == RESULT_CANCELED) {
+                // Sign in was canceled by the user, finish the activity
+                Toast.makeText(this, "Sign in canceled", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -174,25 +259,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSignedInInitialize(String username) {
-
+        querygetRFID();
         attachDatabaseReadListener();
+
     }
 
     public void onSignedOutCleanup() {
 
         detachDatabaseReadListener();
+        mUsername.setText("");
+        mAge.setText("");
+        mRFID.setText("");
+        tempText.setText("");
+        oxygenText.setText("");
+        pulseText.setText("");
+        AgeEditText.setText("");
+        nameEditText.setText("");
+        AgeEditText.setHint("Age");
+        nameEditText.setHint("Name");
     }
 
     public void attachDatabaseReadListener() {
         if (mChildEventListener == null) {
+            String T=FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
           mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                Reading readings = dataSnapshot.getValue(Reading.class);
-                tempText.setText(readings.getReadingTemp());
-                pulseText.setText(readings.getReadingPulse());
-                oxygenText.setText(readings.getReadingOxygen());
+                if (dataSnapshot.exists()) {
+                    Reading readings = dataSnapshot.getValue(Reading.class);
+                    tempText.setText(readings.getReadingTemp().toString().trim());
+                    pulseText.setText(readings.getReadingPulse().toString().trim());
+                    oxygenText.setText(readings.getReadingOxygen().toString().trim());
+                }
             }
 
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -208,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-            mMessagesDatabaseReference.child("C95ADE39").child("readings").addChildEventListener(mChildEventListener);
+            mMessagesDatabaseReference.child(T).addChildEventListener(mChildEventListener);
 
         }
 
