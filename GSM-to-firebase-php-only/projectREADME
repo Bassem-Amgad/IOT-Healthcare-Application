@@ -1,0 +1,15 @@
+url for communication with GSM:
+https://gsm-to-firebase.herokuapp.com
+
+data to be sent format:
+https://gsm-to-firebase.herokuapp.com/RFID/oxygenrate/heartrate/temperature/dateandtime
+
+dateandtime format: year-month-day-hour-sec
+(no spaces nor '/')
+year ex: 2018, 2019, ...
+month ex: 01, 02, 03, 04, 05, 06, 07,..., 09, 10, 11, 12.
+hour ex: 00, 01, 02, 03, 04, 05, 06, ..., 11, 12, 13, 14, ..., 20, 21, 22, 23.
+sec ex: 00, 01, 02, 03, 04, 05, 06, ..., 56, 57, 58, 59.
+
+example:
+https://gsm-to-firebase.herokuapp.com/1234/23/34/45/2018-06-30-09:00
