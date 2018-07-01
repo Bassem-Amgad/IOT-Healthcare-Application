@@ -11,10 +11,6 @@ $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/doctor-4c9a4-firebase-a
 
 $firebase = (new Factory)
     ->withServiceAccount($serviceAccount)
-    // The following line is optional if the project id in your credentials file
-    // is identical to the subdomain of your Firebase project. If you need it,
-    // make sure to replace the URL with the URL of your project.
-    //->withDatabaseUri('https://my-project.firebaseio.com')
     ->create();
 
 $database = $firebase->getDatabase();
@@ -34,19 +30,16 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 // Our web handlers
-
 $app->get('/', function() use($app) {
   $app['monolog']->addDebug('logging output.');
   return $app['twig']->render('index.twig');
 });
 
-//ana 3yza ab3t bldate msh anonymous key ...
+// main code...
 $app->get('/{ref}/{oxygen}/{pulse}/{temp}/{date}', function($ref,$oxygen,$pulse,$temp,$date) use($app, $database) {
 $newPost = $database
     ->getReference($ref)
     ->update([
-      // 'Date' => now(),  //faild trial to get date and time
-      //'Date' =>  new DateTime(),   //faild trial to get date and time
       $date =>[
         'readingOxygen' => $oxygen,
         'readingPulse' => $pulse,
@@ -54,7 +47,7 @@ $newPost = $database
         ]
       ]);
 
-// pushing data with a random key: >> success
+// pushing data with a random key: 
 // $newPost = $database
 //     ->getReference($ref)
 //     ->set([
@@ -64,27 +57,6 @@ $newPost = $database
 //         'readingTemp' => $temp
 //     ]);
 
-// failed trial
-    // $test = [
-    //   'readingOxygen' => $oxygen,
-    //   'readingPulse' => $pulse,
-    //   'readingTemp' => $temp
-    // ];
-
-    // $dateTime = new DateTime();
-    // $firebase->set($ref . '/' . $dateTime->format('c'), $test);
-
-//another failed trial
-// $refer = $database
-//     ->getReference($ref)
-//     ->set('created_at', Database::SERVER_TIMESTAMP);
-
-// trial to get parent key >> failed
-  // $datav = $newPost->getValue();
-  // $datakeys = array_keys($datav);
-  // $newKey = end($datakeys);
-  // return json_encode(['key' => $newKey])
-  
   return json_encode(["msg" => "done"]);
 });
 
