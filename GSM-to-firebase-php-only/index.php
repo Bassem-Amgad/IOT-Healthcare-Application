@@ -11,6 +11,10 @@ $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/doctor-4c9a4-firebase-a
 
 $firebase = (new Factory)
     ->withServiceAccount($serviceAccount)
+    // The following line is optional if the project id in your credentials file
+    // is identical to the subdomain of your Firebase project. If you need it,
+    // make sure to replace the URL with the URL of your project.
+    //->withDatabaseUri('https://my-project.firebaseio.com')
     ->create();
 
 $database = $firebase->getDatabase();
@@ -30,24 +34,27 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 // Our web handlers
+
 $app->get('/', function() use($app) {
   $app['monolog']->addDebug('logging output.');
   return $app['twig']->render('index.twig');
 });
 
-// main code...
-$app->get('/{ref}/{oxygen}/{pulse}/{temp}/{date}', function($ref,$oxygen,$pulse,$temp,$date) use($app, $database) {
+
+$app->get('/{ref}/{oxygen}/{pulse}/{temp}/{long}/{lat}/{date}', function($ref,$oxygen,$pulse,$temp,$long,$lat,$date) use($app, $database) {
 $newPost = $database
     ->getReference($ref)
     ->update([
       $date =>[
+        'readingLatitude' => $lat,
+        'readingLongitude' => $long,
         'readingOxygen' => $oxygen,
         'readingPulse' => $pulse,
         'readingTemp' => $temp
         ]
       ]);
 
-// pushing data with a random key: 
+// pushing data with a random key: >> success
 // $newPost = $database
 //     ->getReference($ref)
 //     ->set([
@@ -56,7 +63,7 @@ $newPost = $database
 //         'readingPulse' => $pulse,
 //         'readingTemp' => $temp
 //     ]);
-
+  
   return json_encode(["msg" => "done"]);
 });
 
